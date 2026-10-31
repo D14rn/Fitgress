@@ -7,13 +7,44 @@ Table progression_track_item [headercolor: #175e7a] {
 	id uuid [ pk, not null ]
 	track_id uuid [ not null ]
 	name varchar(255) [ not null ]
-	position text [ not null, note: 'Fractional index key' ]
+	position text [ not null, note: 'Fractional index key (base-62 digits, never ends in 0).' ]
+}
 
-	indexes {
-		(position, track_id) [ name: 'progression_track_item_index_0', unique ]
-	}
+Table user_progression_track_item [headercolor: #175e7a] {
+	user_id uuid [ pk, not null ]
+	track_item_id uuid [ pk, not null ]
+	completed_at timestamptz [ not null, default: `now()` ]
+}
+
+Table user_progression_track [headercolor: #175e7a] {
+	user_id uuid [ pk, not null ]
+	track_id uuid [ pk, not null ]
+	started_at timestamptz [ not null, default: `now()` ]
+}
+
+Table fitgress_user [headercolor: #175e7a] {
+	id uuid [ pk, not null, default: `gen_random_uuid()` ]
+	email varchar(255) [ not null, unique ]
+	display_name varchar(255) [ not null ]
+	created_at timestamptz [ not null, default: `now()` ]
 }
 
 Ref fk_progression_track_id_progression_track_item {
 	progression_track.id < progression_track_item.track_id [ delete: no action, update: no action ]
+}
+
+Ref fk_user_progression_track_user_id_fitgress_user {
+	user_progression_track.user_id > fitgress_user.id [ delete: cascade, update: no action ]
+}
+
+Ref fk_user_progression_track_item_user_id_fitgress_user {
+	user_progression_track_item.user_id > fitgress_user.id [ delete: cascade, update: no action ]
+}
+
+Ref fk_user_progression_track_track_id_progression_track {
+	user_progression_track.track_id > progression_track.id [ delete: cascade, update: no action ]
+}
+
+Ref fk_user_progression_track_item_track_item_id_progression_track_item {
+	user_progression_track_item.track_item_id > progression_track_item.id [ delete: cascade, update: no action ]
 }
