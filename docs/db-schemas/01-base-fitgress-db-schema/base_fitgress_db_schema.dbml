@@ -1,0 +1,19 @@
+Table progression_track [headercolor: #175e7a] {
+	id uuid [ pk, not null ]
+	name varchar(255) [ not null ]
+}
+
+Table progression_track_item [headercolor: #175e7a] {
+	id uuid [ pk, not null ]
+	track_id uuid [ not null ]
+	name varchar(255) [ not null ]
+	position text [ not null, note: 'Fractional index key' ]
+
+	indexes {
+		(position, track_id) [ name: 'progression_track_item_index_0', unique ]
+	}
+}
+
+Ref fk_progression_track_id_progression_track_item {
+	progression_track.id < progression_track_item.track_id [ delete: no action, update: no action ]
+}
