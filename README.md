@@ -13,14 +13,23 @@ docker compose up -d postgres
 
 ### Backend
 
-Requires JDK 25. Set `FITGRESS_JDK_HOME` to the path of the JDK 25 directory:
+Requires JDK 25. From the repository root, enter the backend directory:
+```sh
+cd backend
+```
+
+On Linux or macOS, set `FITGRESS_JDK_HOME` to the JDK 25 directory, then source the environment script:
+```sh
+export FITGRESS_JDK_HOME="/path/to/jdk-25"
+. ./env.sh
+./mvnw spring-boot:run
+```
+
+On Windows, set `FITGRESS_JDK_HOME` to the JDK 25 directory (this persists the environment variable):
 ```powershell
 setx FITGRESS_JDK_HOME "C:\path\to\jdk-25"
 ```
-
-Run the env script then the API:
 ```powershell
-cd backend
 . .\env.ps1
 .\mvnw.cmd spring-boot:run
 ```
