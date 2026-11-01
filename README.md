@@ -18,9 +18,12 @@ Requires JDK 25. From the repository root, enter the backend directory:
 cd backend
 ```
 
-On Linux or macOS, set `FITGRESS_JDK_HOME` to the JDK 25 directory, then source the environment script:
+On Linux or macOS, set `FITGRESS_JDK_HOME` to the JDK 25 directory:
 ```sh
-export FITGRESS_JDK_HOME="/path/to/jdk-25"
+export FITGRESS_JDK_HOME="/path/to/jdk-25/Contents/Home/"
+```
+
+```sh
 . ./env.sh
 ./mvnw spring-boot:run
 ```
