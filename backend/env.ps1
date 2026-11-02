@@ -1,6 +1,23 @@
 $jdkHome = $env:FITGRESS_JDK_HOME
 if (-not $jdkHome) {
-    Write-Error 'FITGRESS_JDK_HOME is not set. Run: setx FITGRESS_JDK_HOME "C:\path\to\jdk-25" then open a new terminal.'
+    $envFile = Join-Path $PSScriptRoot '..\.env'
+    if (Test-Path $envFile) {
+        foreach ($line in Get-Content $envFile) {
+            if ($line -match '^\s*FITGRESS_JDK_HOME\s*=\s*(.*?)\s*$') {
+                $jdkHome = $Matches[1]
+                if ($jdkHome.Length -ge 2 -and
+                    (($jdkHome.StartsWith('"') -and $jdkHome.EndsWith('"')) -or
+                     ($jdkHome.StartsWith("'") -and $jdkHome.EndsWith("'")))) {
+                    $jdkHome = $jdkHome.Substring(1, $jdkHome.Length - 2)
+                }
+                break
+            }
+        }
+    }
+}
+
+if (-not $jdkHome) {
+    Write-Error 'FITGRESS_JDK_HOME is not set. Add your JDK 25 path to FITGRESS_JDK_HOME in the repository .env file, or set it in this terminal.'
     return
 }
 if (-not (Test-Path (Join-Path $jdkHome 'bin\java.exe'))) {
